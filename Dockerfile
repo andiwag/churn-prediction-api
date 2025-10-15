@@ -1,8 +1,6 @@
 # Start from a slim Python base
-FROM python:3.12-slim
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
-# Install uv (super fast package installer)
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 WORKDIR /app
 
@@ -14,10 +12,11 @@ RUN uv sync --frozen
 
 # Copy source
 COPY src ./src
-COPY tests ./tests
 
 # Run as non-root
-RUN useradd -m appuser
-USER appuser
+#RUN useradd -m appuser
+#USER appuser
 
+# after WORKDIR /app
+ENV PYTHONPATH="/app/src"
 CMD ["uv", "run", "python", "-m", "app.main"]
